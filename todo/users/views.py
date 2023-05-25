@@ -1,48 +1,35 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
+from .forms import LoginUserForm, RegisterUserForm
 
-def login(request):
-    if request.user.is_authenticated:
-        return redirect('todo/main.html')
-     
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username =username, password = password)
- 
-        if user is not None:
-            login(request,user)
-            return redirect('todo/main.html')
-        else:
-            form = AuthenticationForm()
-            return render(request,'users/login.html',{'form':form})
-     
-    else:
-        form = AuthenticationForm()
-        return render(request, 'users/login.html', {'form':form})
+from django.views import generic
+
+# Регистрация
+class RegisterUser(generic.CreateView):
+    form_class = RegisterUserForm
+    template_name = 'users/register.html'
+    success_url = reverse_lazy('app:index')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('app:index')
 
 
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('todo/main.html')
-     
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
- 
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            user = authenticate(username = username,password = password)
-            login(request, user)
-            return redirect('/books')
-         
-        else:
-            return render(request,'users/register.html',{'form':form})
-     
-    else:
-        form = UserCreationForm()
-        return render(request,'users/register.html',{'form':form})
+# Авторизация
+class LoginUser(LoginView):
+    form_class = LoginUserForm
+    template_name = 'users/login.html'
+
+    def get_success_url(self):
+        return reverse_lazy('app:index')
+
+
+def signout(request):
+    logout(request)
+    return redirect('main:main')

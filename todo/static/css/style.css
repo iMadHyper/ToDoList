@@ -1,0 +1,9 @@
+.header-btn {
+    padding: 5px 15px;
+    border-radius: 15px;
+    text-decoration: none;
+}
+
+.header-btn:hover {
+    background-color: #ccc;
+}

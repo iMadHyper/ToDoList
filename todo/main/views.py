@@ -1,8 +1,8 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse
 
 
 def main(request):
     if request.user.is_authenticated:
-        return HttpResponse('<h1>You are authenticated</h1')
+        return render(request, 'todo/main.html')
     else:
         return render(request, 'main/main.html')

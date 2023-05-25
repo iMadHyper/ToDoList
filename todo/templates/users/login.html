@@ -1,8 +1,31 @@
-<form method = 'post'>
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type = "submit" value = "Submit">
-</form>
- 
-<h3>Dont have an account?</h3><br>
-<a href = "{% url 'users:signup' %}">SignUp Here</a>
+{% extends 'base.html' %}
+{% block title %}Авторизация{% endblock %}
+{% block content %}
+
+<div class="container-fluid m-0 p-0">
+    <div class="container-fluid p-4 my-4 mx-auto border-dark" style="width: 500px; border-radius: 15px; border: 2px solid cadetblue;">
+        <div class="container-fluid m-0 mb-3 p-0 row">
+            <p class="m-0 p-0 fs-1 text-center">Авторизация</p>
+        </div>
+        <hr>
+        <div class="container-fluid m-0 mt-3 p-0 row">
+            <form action="." method="post">
+                {% csrf_token %}
+                
+                <div class="form-error">{{ form.non_field_errors }}</div>
+
+                {% for field in form %}
+                <p><label class="form-label me-2" for="{{ field.id_for_label }}">{{ field.label }}: </label>{{ field }}</p>
+                <div class="form-error">{{ field.errors }}</div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+            </form>
+        </div>
+        <hr>
+        <h3>Dont have an account?</h3><br>
+        <a href = "{% url 'users:signup' %}">SignUp Here</a>
+    </div>
+</div>
+
+{% endblock content %}

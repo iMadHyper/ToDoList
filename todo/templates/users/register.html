@@ -1,8 +1,26 @@
-<form method ='post'>
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value = "Submit">
-</form>
- 
-<h3>Already Have an Account??</h3>
-<a href = "{% url 'users:login' %}">Sign In Here</a>
+{% extends 'base.html' %}
+{% block title %}Регистрация{% endblock %}
+{% block content %}
+
+<div class="container-fluid m-0 p-0">
+    <div class="container-fluid p-4 my-4 mx-auto border-dark" style="width: 500px; border-radius: 15px; border: 2px solid cadetblue;">
+        <div class="container-fluid m-0 mb-3 p-0 row">
+            <p class="m-0 p-0 fs-1 text-center">Регистрация</p>
+        </div>
+        <hr>
+        <div class="container-fluid m-0 mt-3 p-0 row">
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <p><label class="form-label me-2" for="{{ field.id_for_label }}">{{ field.label }}: </label>{{ field }}</p>
+                <div class="form-error">{{ field.errors }}</div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+            </form>   
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
