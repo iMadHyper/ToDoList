@@ -2,11 +2,12 @@
 <header class="p-3" style="border-bottom: 1px solid #ccc;"> 
     <div class="container-fluid row fs-3">
         <div class="d-flex col-md-6">
-            <a href="#" class="fs-3" style="text-decoration: none; color: dodgerblue;">aboba</a>
+            <a href="{% url 'app:index' %}" class="fs-3 header-btn">ToDo</a>
         </div>
 
         <div class="col-md-6 d-flex justify-content-end">
-            <a href="#" class="header-btn">Menu</a>
+            <a href="{% url 'users:logout' %}" class="header-btn mx-2">Log out</a>
+            <a href="#" class="header-btn mx-2">{{ user.username }}</a>
         </div>
     </div>
 </header>
