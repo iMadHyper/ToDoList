@@ -1,30 +1,44 @@
 {% extends 'base.html' %}
-{% block title %}Авторизация{% endblock %}
+{% block title %}Log in{% endblock %}
 {% block content %}
 
 <div class="container-fluid m-0 p-0">
     <div class="container-fluid p-4 my-4 mx-auto border-dark" style="width: 500px; border-radius: 15px; border: 2px solid cadetblue;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
         <div class="container-fluid m-0 mb-3 p-0 row">
-            <p class="m-0 p-0 fs-1 text-center">Авторизация</p>
+            <p class="m-0 p-0 fs-1 text-center">Log in</p>
         </div>
         <hr>
-        <div class="container-fluid m-0 mt-3 p-0 row">
+        <div class="container text-center m-0 mt-3 p-0 row">
             <form action="." method="post">
                 {% csrf_token %}
                 
                 <div class="form-error">{{ form.non_field_errors }}</div>
 
-                {% for field in form %}
-                <p><label class="form-label me-2" for="{{ field.id_for_label }}">{{ field.label }}: </label>{{ field }}</p>
-                <div class="form-error">{{ field.errors }}</div>
-                {% endfor %}
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="username" id="floatingInput" placeholder="Username">
+                    <label for="floatingInput">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
 
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+                <button type="submit" class="btn btn-primary">Log in</button>
             </form>
         </div>
         <hr>
-        <h3>Dont have an account?</h3><br>
-        <a href = "{% url 'users:signup' %}">SignUp Here</a>
+        <div class="container text-center m-0 p-0">
+            <h3>Dont have an account?</h3>
+            <a href = "{% url 'users:signup' %}">Sign Up Here</a>
+        </div>
     </div>
 </div>
 
