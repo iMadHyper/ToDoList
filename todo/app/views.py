@@ -53,5 +53,13 @@ def complete_task(request, pk):
     if task:
         task.is_completed = True
         task.save()
-        
+
     return redirect('app:index')
+
+
+def completed_tasks(request):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    tasks = models.Task.objects.filter(user=request.user).filter(is_completed=True).order_by("-date", "-time")
+    return render(request, 'todo/completed_tasks.html', { 'tasks' : tasks })
