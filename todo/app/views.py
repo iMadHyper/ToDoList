@@ -31,3 +31,27 @@ def add_task(request):
 
     else:
         return redirect('app:index')
+
+
+def delete_task(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    task = models.Task.objects.filter(user=request.user).get(pk=pk)
+
+    if task:
+        task.delete()
+    return redirect('app:index')
+
+
+def complete_task(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    task = models.Task.objects.filter(user=request.user).get(pk=pk)
+
+    if task:
+        task.is_completed = True
+        task.save()
+        
+    return redirect('app:index')
