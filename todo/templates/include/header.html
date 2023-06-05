@@ -1,0 +1,16 @@
+{% load static %}
+
+<div class="container-fluid bg-dark m-0">
+    <header class="d-flex flex-wrap justify-content-center py-3">
+        <ul class="nav nav-pills me-md-auto">
+            <li class="nav-item">
+                <a href="/" class="nav-link text-white fs-4 header-btn">Todo</a>
+            </li>
+        </ul>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a href="{% url 'users:login' %}" class="nav-link text-white fs-4 header-btn">Log in</a>
+            </li>
+        </ul>
+    </header>
+</div>
