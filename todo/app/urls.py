@@ -10,6 +10,7 @@ urlpatterns = [
     re_path(r"^complete/(?P<pk>[0-9]+)/$", views.complete_task , name="complete_task"),
 
     re_path(r"^completed/$", views.completed_tasks , name="completed_tasks"),
+    re_path(r"^upcoming/$", views.upcoming_tasks , name="upcoming_tasks"),
 
     re_path(r'^', views.index, name='index'),
 ]

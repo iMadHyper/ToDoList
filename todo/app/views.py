@@ -15,8 +15,8 @@ def index(request):
         return redirect('users:login')
 
     form = forms.AddTaskForm()
-    tasks = models.Task.objects.filter(user=request.user).filter(is_completed=False).filter(date__lte=datetime.date.today())
-    return render(request, 'todo/main.html', { 'form' : form, 'tasks' : tasks})
+    
+    return render(request, 'todo/main.html', { 'form' : form })
 
 
 def add_task(request):
@@ -47,6 +47,7 @@ def delete_task(request, pk):
 
     if task:
         task.delete()
+
     return redirect('app:index')
 
 
@@ -67,5 +68,13 @@ def completed_tasks(request):
     if not request.user.is_authenticated:
         return redirect('users:login')
     
-    tasks = models.Task.objects.filter(user=request.user).filter(is_completed=True).order_by("-date", "-time")
-    return render(request, 'todo/completed_tasks.html', { 'tasks' : tasks })
+    return render(request, 'todo/completed_tasks.html')
+
+
+def upcoming_tasks(request):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    form = forms.AddTaskForm()
+
+    return render(request, 'todo/upcoming_tasks.html', { 'form' : form })

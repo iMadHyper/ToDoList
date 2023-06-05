@@ -1,4 +1,5 @@
 {% extends 'todo/base.html' %}
+{% load tasks_tags %}
 {% block title %}Completed tasks{% endblock title %}
 
 {% block content %}
@@ -7,11 +8,12 @@
     <h1 class="mb-3">Completed tasks</h1>
 
     <div class="container-fluid">
+        {% get_completed_tasks user as tasks %}
         {% if tasks %}
             {% for task in tasks %}
             <div class="container-fluid row m-0 my-2 p-2" style="border-bottom: 1px solid #ccc;">
-                <div class="container-fluid row">
-                    <div class="d-flex m-0 p-0">
+                <div class="d-flex flex-row">
+                    <div class="flex-grow-1 d-flex m-0 p-0">
                         <div class="container-fluid p-0 m-0">
                             <div class="container-fluid row">
                                 {{ task.name }}
@@ -23,10 +25,18 @@
                                  / {{ task.section }}
                                 {% endif %}
                             </div>
+                            {% if task.description %}
                             <div class="container-fluid row fs-4" style="color: #868686;">
                                 {{ task.description }}
                             </div>
+                            {% endif %}
                         </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center m-0 p-0" style="min-width: 200px;">
+                        {% if task.time %}
+                        {{ task.time }}, 
+                        {% endif %}
+                        {{ task.date }}
                     </div>
                 </div>
             </div>

@@ -1,16 +1,30 @@
 {% load static %}
+{% load tasks_tags %}
+
+{% get_today_tasks user as today_tasks %}
+{% get_upcoming_tasks user as upcoming_tasks %}
+{% get_completed_tasks user as completed_tasks %}
 
 <div class="col-md-2 d-flex flex-column flex-shrink-0 p-3" style="background-color: #f3f3f3;">
 
     <ul class="nav flex-column">
         <li class="nav-item fs-5 navbar-btn">
             <div class="d-flex flex-row justify-content-center align-items-center">
-                <a class="nav-link flex-grow-1 text-dark" href="{% url 'app:index' %}">Today</a>
-                <span class="mx-2">5</span>
+                <a class="nav-link flex-grow-1 text-dark" href="{% url 'app:completed_tasks' %}">Completed</a>
+                <span class="mx-2">{{ completed_tasks.count }}</span>
             </div>
         </li>
         <li class="nav-item fs-5 navbar-btn">
-            <a class="nav-link text-dark" href="#">Upcoming</a>
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <a class="nav-link flex-grow-1 text-dark" href="{% url 'app:index' %}">Today</a>
+                <span class="mx-2">{{ today_tasks.count }}</span>
+            </div>
+        </li>
+        <li class="nav-item fs-5 navbar-btn">
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <a class="nav-link flex-grow-1 text-dark" href="{% url 'app:upcoming_tasks' %}">Upcoming</a>
+                <span class="mx-2">{{ upcoming_tasks.count }}</span>
+            </div>
         </li>
     </ul>
 
