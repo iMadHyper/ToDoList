@@ -3,7 +3,7 @@ from django.contrib import admin
 from . import models
 
 
-@admin.register(models.Category)
+@admin.register(models.Folder)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 

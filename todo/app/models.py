@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 import datetime
 
 
-class Category(models.Model):
+class Folder(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
     description = models.TextField(max_length=500, verbose_name='Описание')
 
@@ -23,7 +23,7 @@ class Category(models.Model):
 
 
 class Section(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sections')
+    category = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='sections')
     name = models.CharField(max_length=100, verbose_name='Название')
 
 
@@ -36,7 +36,7 @@ class Section(models.Model):
 
 
 class Task(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
+    category = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks', verbose_name='Пользователь', null=True, blank=True)
     name = models.CharField(max_length=150, verbose_name='Название')
