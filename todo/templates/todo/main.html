@@ -5,26 +5,70 @@
 
 <div class="col-md-10 py-4 px-5 fs-3">
     <h1 class="mb-3">Today</h1>
-    <span class="fs-4 mx-3" style="color: #868686;">Add task</span>
-    <div class="d-flex p-0 my-2" style="border-radius: 15px; border: 1px solid #ccc;">
-        <form action="{% url 'app:add_task' %}" method="post" class="fs-5 m-3">
-            {% csrf_token %}
-            
-            <div class="form-error">{{ form.non_field_errors }}</div>
-            <table>
-                {% for field in form %}
-                    <tr>
-                        <td style="padding: 4px 0px;"><label class="form-label me-2" for="{{ field.id_for_label }}">{{ field.label }}: </label></th>
-                        <td style="padding: 4px 0px;">{{ field }}</th>
-                    </tr>
-                    <tr>
-                        <div class="form-error">{{ field.errors }}</div>
-                    </tr>
-                {% endfor %}
-            </table>
-            <button type="submit" class="btn btn-primary m-2">Добавить</button>
-        </form>  
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Add task
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <form method="POST" class="fs-5 m-3" action="{% url 'app:add_task' %}">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                Your Form Has Errors
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        {{ field.errors }}
+                                    {% endif %}
+                                {% endfor %}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Username">
+                                    <label for="floatingInput">Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" name="date" id="floatingDate" placeholder="Date">
+                                    <label for="floatingDate">Date</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="time" class="form-control" name="time" id="floatingTime" placeholder="Time">
+                                    <label for="floatingTime">Time</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-floating mb-3">
+                                    <textarea class="form-control" name="description" placeholder="Description" id="floatingTextarea"></textarea>
+                                    <label for="floatingTextarea">Description</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary m-2">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+
     <div class="container-fluid">
         {% if tasks %}
             {% for task in tasks %}

@@ -5,6 +5,8 @@ from django.views import generic
 from . import forms
 from . import models
 
+from django.contrib import messages
+
 import datetime
 
 
@@ -26,9 +28,13 @@ def add_task(request):
         if form.is_valid():
             cd = form.cleaned_data
             cd['user'] = request.user
+            if not cd['date']:
+                cd['date'] = datetime.date.today()
             models.Task.objects.create(**cd)
             return redirect('app:index')
-
+        else:
+            messages.success(request, f'{form.errors}')
+            return render(request, 'todo/main.html')
     else:
         return redirect('app:index')
 
