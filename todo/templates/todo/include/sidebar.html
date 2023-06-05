@@ -1,0 +1,32 @@
+{% load static %}
+
+<div class="col-md-2 d-flex flex-column flex-shrink-0 p-3" style="background-color: #f3f3f3;">
+
+    <ul class="nav flex-column">
+        <li class="nav-item fs-5 navbar-btn">
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <a class="nav-link flex-grow-1 text-dark" href="{% url 'app:index' %}">Today</a>
+                <span class="mx-2">5</span>
+            </div>
+        </li>
+        <li class="nav-item fs-5 navbar-btn">
+            <a class="nav-link text-dark" href="#">Upcoming</a>
+        </li>
+    </ul>
+
+    <ul class="nav flex-column mt-4">
+        <li class="nav-item fs-5 navbar-btn">
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <a class="nav-link flex-grow-1 text-dark" href="#">Folders</a>
+                <a href="#" class="nav-link text-dark m-0 p-0 px-2 fs-4">+</a>
+                <span class="mx-2">3</span>
+            </div>
+        </li>
+        <li class="nav-item fs-5 navbar-btn">
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <span aria-hidden="true" class="ms-2"><svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg></span>
+                <a class="nav-link flex-grow-1 text-dark ps-1" href="#">Smth</a>
+            </div>
+        </li>
+    </ul>
+</div>

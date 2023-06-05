@@ -3,45 +3,37 @@
 
 {% block content %}
 
-<div class="container-fluid m-0 p-0 row">
-    <div class="col-md-2 d-flex py-4 fs-3" style="background-color: rgb(250, 250, 250);">
-        <div class="container">
-            <a href="{% url 'app:index' %}">Today</a>
-        </div>
-    </div>
-    
-    <div class="col-md-10 py-4 px-5 fs-3">
-        <h1 class="mb-3">Completed tasks</h1>
+<div class="col-md-10 py-4 px-5 fs-3">
+    <h1 class="mb-3">Completed tasks</h1>
 
-        <div class="container-fluid">
-            {% if tasks %}
-                {% for task in tasks %}
-                <div class="container-fluid row m-0 my-2 p-2" style="border-bottom: 1px solid #ccc;">
-                    <div class="container-fluid row">
-                        <div class="d-flex m-0 p-0">
-                            <div class="container-fluid p-0 m-0">
-                                <div class="container-fluid row">
-                                    {{ task.name }}
-                                    {% if task.category %}
-                                     / {{ task.category }}
-                                    {% endif %}
-                                    
-                                    {% if task.section %}
-                                     / {{ task.section }}
-                                    {% endif %}
-                                </div>
-                                <div class="container-fluid row fs-4" style="color: #868686;">
-                                    {{ task.description }}
-                                </div>
+    <div class="container-fluid">
+        {% if tasks %}
+            {% for task in tasks %}
+            <div class="container-fluid row m-0 my-2 p-2" style="border-bottom: 1px solid #ccc;">
+                <div class="container-fluid row">
+                    <div class="d-flex m-0 p-0">
+                        <div class="container-fluid p-0 m-0">
+                            <div class="container-fluid row">
+                                {{ task.name }}
+                                {% if task.category %}
+                                 / {{ task.category }}
+                                {% endif %}
+                                
+                                {% if task.section %}
+                                 / {{ task.section }}
+                                {% endif %}
+                            </div>
+                            <div class="container-fluid row fs-4" style="color: #868686;">
+                                {{ task.description }}
                             </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-            {% else %}
-                <h1>No tasks</h1>
-            {% endif %}
-        </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <h1>No tasks</h1>
+        {% endif %}
     </div>
 </div>
 

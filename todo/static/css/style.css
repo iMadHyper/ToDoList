@@ -1,9 +1,12 @@
-.header-btn {
-    padding: 5px 15px;
-    border-radius: 15px;
-    text-decoration: none;
+.navbar-btn {
+    border-radius: 10px;
+}
+
+.navbar-btn:hover {
+    background-color: #dddddd;
 }
 
 .header-btn:hover {
-    background-color: #ccc;
+    color: #9c9c9c;
+    background-color: rgb(71, 71, 71);
 }
