@@ -4,19 +4,19 @@ from . import models
 
 
 @admin.register(models.Folder)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+class FolderAdmin(admin.ModelAdmin):
+    list_display = ('user', 'name', 'slug')
 
 
 @admin.register(models.Section)
-class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('category', 'name')
+class SectionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'folder', 'name')
 
 
 @admin.register(models.Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('category', 'section', 'user', 'name', 'description', 'date', 'time', 'is_completed')
-    list_filter = ('date', 'time', 'name', 'category', 'section')
+    list_display = ('user', 'name', 'description', 'date', 'time', 'is_completed')
+    list_filter = ('date', 'time', 'name', 'folder', 'section')
 
     fieldsets = (
         ('Добавить задачу', {
@@ -25,7 +25,7 @@ class TaskAdmin(admin.ModelAdmin):
         }),
         ('Дополнительные параметры', {
             'classes' : ('collapse',),
-            'fields' : ('category', 'section', 'is_completed')
+            'fields' : ('folder', 'section', 'is_completed')
         }),
     )
 

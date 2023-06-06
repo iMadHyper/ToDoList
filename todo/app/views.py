@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.utils.text import slugify
 
 from django.views import generic
 from . import forms
@@ -89,6 +89,7 @@ def add_folder(request):
         if form.is_valid():
             cd = form.cleaned_data
             cd['user'] = request.user
+            cd['slug'] = slugify(str(cd['name']))
             models.Folder.objects.create(**cd)
             return redirect(request.META['HTTP_REFERER'])
         else:

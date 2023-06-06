@@ -8,7 +8,7 @@ import datetime
 class Folder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='folders', verbose_name='Пользователь', null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name='Название')
-
+    slug = models.SlugField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -24,7 +24,7 @@ class Folder(models.Model):
 
 class Section(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sections', verbose_name='Пользователь', null=True, blank=True)
-    category = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='sections')
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='sections', null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name='Название')
 
 
@@ -37,7 +37,7 @@ class Section(models.Model):
 
 
 class Task(models.Model):
-    category = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks', verbose_name='Пользователь', null=True, blank=True)
     name = models.CharField(max_length=150, verbose_name='Название')
