@@ -6,6 +6,7 @@ import datetime
 
 
 class Folder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='folders', verbose_name='Пользователь', null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name='Название')
 
 
@@ -22,6 +23,7 @@ class Folder(models.Model):
 
 
 class Section(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sections', verbose_name='Пользователь', null=True, blank=True)
     category = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='sections')
     name = models.CharField(max_length=100, verbose_name='Название')
 

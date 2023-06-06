@@ -1,6 +1,7 @@
 from django import template
 
 from app import models
+from app import forms
 
 import datetime
 
@@ -21,3 +22,13 @@ def get_completed_tasks(user):
 @register.simple_tag()
 def get_upcoming_tasks(user):
     return models.Task.objects.filter(user=user).filter(is_completed=False).filter(date__gt=datetime.date.today()).order_by("-date", "-time")
+
+
+@register.simple_tag()
+def get_folders(user):
+    return models.Folder.objects.filter(user=user)
+
+
+@register.simple_tag()
+def get_folder_form():
+    return forms.AddFolderForm()

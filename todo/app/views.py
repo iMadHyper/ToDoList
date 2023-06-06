@@ -48,7 +48,7 @@ def delete_task(request, pk):
     if task:
         task.delete()
 
-    return redirect('app:index')
+    return redirect(request.META['HTTP_REFERER'])
 
 
 def complete_task(request, pk):
@@ -61,7 +61,7 @@ def complete_task(request, pk):
         task.is_completed = True
         task.save()
 
-    return redirect('app:index')
+    return redirect(request.META['HTTP_REFERER'])
 
 
 def completed_tasks(request):
@@ -78,3 +78,32 @@ def upcoming_tasks(request):
     form = forms.AddTaskForm()
 
     return render(request, 'todo/upcoming_tasks.html', { 'form' : form })
+
+
+def add_folder(request):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    if request.method == 'POST':
+        form = forms.AddFolderForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            cd['user'] = request.user
+            models.Folder.objects.create(**cd)
+            return redirect(request.META['HTTP_REFERER'])
+        else:
+            return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect('app:index')
+
+
+def delete_folder(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    folder = models.Folder.objects.filter(user=request.user).get(pk=pk)
+
+    if folder:
+        folder.delete()
+
+    return redirect(request.META['HTTP_REFERER'])

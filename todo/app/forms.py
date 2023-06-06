@@ -13,3 +13,12 @@ class AddTaskForm(forms.ModelForm):
     class Meta:
         model = models.Task
         fields = ('name', 'description', 'date', 'time')
+
+
+class AddFolderForm(forms.ModelForm):
+    name = forms.CharField(label='Name', widget=forms.TextInput())
+
+
+    class Meta:
+        model = models.Folder
+        fields = ('name',)

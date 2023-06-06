@@ -5,6 +5,8 @@
 {% get_upcoming_tasks user as upcoming_tasks %}
 {% get_completed_tasks user as completed_tasks %}
 
+{% get_folders user as folders %}
+
 <div class="col-md-2 d-flex flex-column flex-shrink-0 p-3" style="background-color: #f3f3f3;">
 
     <ul class="nav flex-column">
@@ -33,33 +35,63 @@
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <a class="nav-link flex-grow-1 text-dark" href="#">Folders</a>
                 <a href="#" class="nav-link text-dark m-0 p-0 px-2 fs-4" data-bs-toggle="modal" data-bs-target="#exampleModal">+</a>
-                <span class="mx-2">3</span>
+                <span class="mx-2">{% if folders.count > 0 %}{{ folders.count }}{% endif %}</span>
             </div>
         </li>
+        {% if folders %}
+        {% for folder in folders %}
         <li class="nav-item fs-5 navbar-btn">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <span aria-hidden="true" class="ms-2"><svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg></span>
-                <a class="nav-link flex-grow-1 text-dark ps-1" href="#">Smth</a>
+                <a class="nav-link flex-grow-1 text-dark ps-1" href="#">{{ folder.name }}</a>
+                <div class="dropdown mx-2">
+                    <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                  
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url 'app:remove_folder' folder.id %}">Delete folder</a></li>
+                    </ul>
+                  </div>
             </div>
         </li>
+        {% endfor %}
+        {% endif %}
     </ul>
 </div>
 
-
+{% get_folder_form as form %}
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new folder</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <form method="POST" class="fs-5 m-3" action="{% url 'app:add_folder' %}">
+                    {% csrf_token %}
+                    {% if form.errors %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            Your Form Has Errors
+                            {% for field in form %}
+                                {% if field.errors %}
+                                    {{ field.errors }}
+                                {% endif %}
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="d-flex">
+                            <div class="flex-grow-1 form-floating me-2">
+                                <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Username">
+                                <label for="floatingInput">Name *</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Добавить</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
