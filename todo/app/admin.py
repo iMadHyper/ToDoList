@@ -5,7 +5,7 @@ from . import models
 
 @admin.register(models.Folder)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
+    list_display = ('name',)
 
 
 @admin.register(models.Section)

@@ -7,7 +7,6 @@ import datetime
 
 class Folder(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название')
-    description = models.TextField(max_length=500, verbose_name='Описание')
 
 
     def __str__(self):
