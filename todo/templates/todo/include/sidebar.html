@@ -41,10 +41,12 @@
         {% if folders %}
         {% for folder in folders %}
         <li class="nav-item fs-5 navbar-btn">
-            <div class="d-flex flex-row justify-content-center align-items-center">
+            <div class="d-flex flex-row justify-content-center align-items-center" id="folder_div">
                 <span aria-hidden="true" class="ms-2"><svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg></span>
                 <a class="nav-link flex-grow-1 text-dark ps-1" href="{% url 'app:folder_tasks' folder.id %}">{{ folder.name }}</a>
-                <div class="dropdown mx-2">
+                {% get_folder_tasks user folder.id as folder_tasks %}
+                <span class="mx-2" id="folder_tasks_count">{{ folder_tasks.count }}</span>
+                <div class="dropdown mx-2"  id="del_folder">
                     <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
                   
                     <ul class="dropdown-menu">
@@ -96,6 +98,21 @@
         </div>
     </div>
 </div>
+
+<style>
+    #folder_div #del_folder {
+        display: none;
+    }
+    #folder_div:hover #del_folder {
+        display: flex;
+    }
+    #folder_div #folder_tasks_count {
+        display: block;
+    }
+    #folder_div:hover #folder_tasks_count {
+        display: none;
+    }
+</style>
 
 <script type="text/javascript">
     function success() {
