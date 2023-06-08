@@ -1,11 +1,11 @@
 {% extends 'todo/base.html' %}
 {% load tasks_tags %}
-{% block title %}Today{% endblock title %}
+{% block title %}{{ folder.name }}{% endblock title %}
 
 {% block content %}
 
 <div class="col-md-10 py-4 px-5 fs-3">
-    <h1 class="mb-3">Today</h1>
+    <h1 class="mb-3">{{ folder.name }}</h1>
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -23,7 +23,7 @@
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <form method="POST" class="fs-5 m-3" action="{% url 'app:add_task' %}">
+                    <form method="POST" class="fs-5 m-3" action="{% url 'app:add_folder_task' folder.id %}">
                         {% csrf_token %}
                         {% if form.errors %}
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -71,7 +71,7 @@
     </div>
 
     <div class="container-fluid">
-        {% get_today_tasks user as tasks %}
+        {% get_folder_tasks user folder.id as tasks %}
         {% if tasks %}
             {% for task in tasks %}
             <div class="container-fluid row m-0 my-2 p-2" style="border-bottom: 1px solid #ccc;">

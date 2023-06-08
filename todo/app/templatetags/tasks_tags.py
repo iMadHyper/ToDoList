@@ -32,3 +32,8 @@ def get_folders(user):
 @register.simple_tag()
 def get_folder_form():
     return forms.AddFolderForm()
+
+
+@register.simple_tag()
+def get_folder_tasks(user, folder_pk):
+    return models.Folder.objects.filter(user=user).get(pk=folder_pk).get_tasks().filter(is_completed=False)

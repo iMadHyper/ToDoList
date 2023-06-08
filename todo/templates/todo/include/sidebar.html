@@ -43,7 +43,7 @@
         <li class="nav-item fs-5 navbar-btn">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <span aria-hidden="true" class="ms-2"><svg width="24" height="24" viewBox="0 0 24 24" class="project_icon" style="color: rgb(184, 184, 184);"><path d="M12 7a5 5 0 110 10 5 5 0 010-10z" fill="currentColor"></path></svg></span>
-                <a class="nav-link flex-grow-1 text-dark ps-1" href="#">{{ folder.name }}</a>
+                <a class="nav-link flex-grow-1 text-dark ps-1" href="{% url 'app:folder_tasks' folder.id %}">{{ folder.name }}</a>
                 <div class="dropdown mx-2">
                     <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
                   

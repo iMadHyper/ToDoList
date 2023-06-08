@@ -103,8 +103,50 @@ def delete_folder(request, pk):
         return redirect('users:login')
     
     folder = models.Folder.objects.filter(user=request.user).get(pk=pk)
+    folder_tasks = folder.get_tasks()
+
+    if folder_tasks:
+        folder_tasks.delete()
 
     if folder:
         folder.delete()
 
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect('app:index')
+
+
+def folder_tasks(request, folder_pk):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    folder = models.Folder.objects.filter(user=request.user).get(pk=folder_pk)
+
+    if not folder:
+        return redirect(request.META['HTTP_REFERER'])
+    
+    return render(request, 'todo/folder_tasks.html', { 'folder' : folder })
+
+
+def add_folder_task(request, folder_pk):
+    if not request.user.is_authenticated:
+        return redirect('users:login')
+    
+    folder = models.Folder.objects.filter(user=request.user).get(pk=folder_pk)
+
+    if not folder:
+        return redirect(request.META['HTTP_REFERER'])
+    
+    if request.method == 'POST':
+        form = forms.AddTaskForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            cd['user'] = request.user
+            cd['folder'] = folder
+            if not cd['date']:
+                cd['date'] = datetime.date.today()
+            models.Task.objects.create(**cd)
+            return redirect('app:folder_tasks', folder_pk=folder.id)
+        else:
+            messages.success(request, f'{form.errors}')
+            return render(request, 'todo/folder_tasks.html')
+    else:
+        return redirect('app:index')
