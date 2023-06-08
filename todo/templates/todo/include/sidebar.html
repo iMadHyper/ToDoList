@@ -85,10 +85,10 @@
                     <div class="row">
                         <div class="d-flex">
                             <div class="flex-grow-1 form-floating me-2">
-                                <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Username">
-                                <label for="floatingInput">Name *</label>
+                                <input type="text" class="form-control" name="name" id="folder_floatingInput" placeholder="Username" maxlength="100" onkeyup="success()">
+                                <label for="folder_floatingInput">Name *</label>
                             </div>
-                            <button type="submit" class="btn btn-primary">Добавить</button>
+                            <button id="folder_btn" type="submit" class="btn btn-primary" disabled>Add</button>
                         </div>
                     </div>
                 </form>
@@ -96,3 +96,13 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function success() {
+        if(document.getElementById("folder_floatingInput").value==="") { 
+            document.getElementById('folder_btn').disabled = true; 
+        } else { 
+            document.getElementById('folder_btn').disabled = false;
+        }
+    }
+</script>
