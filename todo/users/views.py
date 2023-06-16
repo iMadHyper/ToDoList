@@ -18,8 +18,8 @@ def login_user(request):
             login(request, user)
             return redirect('app:index')
         else:
-            messages.success(request, 'Username or password is incorrect!')
-            return render(request, 'users/login.html')
+            error = 'Username or password is incorrect!'
+            return render(request, 'users/login.html', { 'error' : error })
     else:
         form = LoginUserForm()
         return render(request, 'users/login.html', { 'form' : form })
