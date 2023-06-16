@@ -23,6 +23,29 @@ def index(request):
     return render(request, 'todo/main.html', { 'form' : form })
 
 
+def respect_redirect_after_adding_task(request):
+    '''
+    Redirect to template from request if possible
+    '''
+    url = '/'.join(request.META['HTTP_REFERER'].split('//')[1].split('/')[1:])
+    print(url)
+    if url == 'app/upcoming/':
+        return redirect('app:upcoming_tasks')
+    else:
+        return redirect('app:index')
+    
+
+def respect_render_after_adding_task(request, msg=None):
+    '''
+    Render the template from request if possible
+    '''
+    url = '/'.join(request.META['HTTP_REFERER'].split('//')[1].split('/')[1:])
+    if url == 'app/upcoming':
+        return render(request, 'todo/upcoming_tasks.html', { 'msg' : msg })
+    else:
+        return render(request, 'todo/main.html', { 'msg' : msg })
+
+
 @if_logged_in
 def add_task(request):
     if request.method == 'POST':
@@ -30,15 +53,20 @@ def add_task(request):
         if form.is_valid():
             cd = form.cleaned_data
             cd['user'] = request.user
+
             if not cd['date']:
                 cd['date'] = datetime.date.today()
+            elif cd['date'] < datetime.date.today():
+                msg = 'Date can\'t be past!'
+                return respect_render_after_adding_task(request, msg=msg)
+            
             models.Task.objects.create(**cd)
-            return redirect('app:index')
+            return respect_redirect_after_adding_task(request)
+        
         else:
-            messages.success(request, f'{form.errors}')
-            return render(request, 'todo/main.html')
+            return respect_render_after_adding_task(request, msg=form.errors)
     else:
-        return redirect('app:index')
+        return respect_redirect_after_adding_task(request)
 
 
 @if_logged_in
