@@ -2,7 +2,7 @@
 {% block title %}Регистрация{% endblock %}
 {% block content %}
 
-<div class="container-fluid m-0 p-0">
+<div class="container-fluid m-0 p-0" style="flex: 1 1 auto;">
     <div class="container-fluid p-4 my-4 mx-auto border-dark" style="width: 500px; border-radius: 15px; border: 2px solid cadetblue;">
         {% if form.errors %}
 			<div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -22,17 +22,6 @@
         <div class="container text-center m-0 mt-3 p-0 row">
             <form method="POST" action="">
                 {% csrf_token %}
-                {% if form.errors %}
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        Your Form Has Errors
-                        {% for field in form %}
-                            {% if field.errors %}
-                                {{ field.errors }}
-                            {% endif %}
-                        {% endfor %}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endif %}
             
                 {% for field in form %}
                     <div class="form-floating mb-3">
