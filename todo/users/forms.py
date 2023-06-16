@@ -20,14 +20,17 @@ class RegisterUserForm(UserCreationForm):
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['username'].widget.attrs['placeholder'] = 'Username'
         self.fields['username'].label = 'Username'
+        self.fields['username'].widget.attrs['onkeyup'] = 'success()'
 
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['placeholder'] = 'Password'
         self.fields['password1'].label = 'Password'
+        self.fields['password1'].widget.attrs['onkeyup'] = 'success()'
 
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm password'
         self.fields['password2'].label = 'Confirm password'
+        self.fields['password2'].widget.attrs['onkeyup'] = 'success()'
 
 
 class LoginUserForm(AuthenticationForm):

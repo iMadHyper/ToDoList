@@ -19,15 +19,15 @@
                 {% csrf_token %}
 
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="username" id="floatingInput" placeholder="Username">
+                    <input type="text" class="form-control" name="username" id="floatingInput" placeholder="Username" autofocus onkeyup="success()">
                     <label for="floatingInput">Username</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+                    <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password" onkeyup="success()">
                     <label for="floatingPassword">Password</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Log in</button>
+                <button type="submit" class="btn btn-primary" id="form_btn" disabled>Log in</button>
             </form>
         </div>
         <hr>
@@ -37,5 +37,15 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function success() {
+        if(document.getElementById("floatingInput").value==="" || document.getElementById("floatingPassword").value==="") { 
+            document.getElementById('form_btn').disabled = true; 
+        } else { 
+            document.getElementById('form_btn').disabled = false;
+        }
+    }
+</script>
 
 {% endblock content %}

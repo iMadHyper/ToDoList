@@ -29,7 +29,7 @@
                     </div>
                 {% endfor %}
             
-                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <button type="submit" class="btn btn-primary" id="form_btn" disabled>Sign Up</button>
             </form> 
         </div>
         <hr>
@@ -39,5 +39,15 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function success() {
+        if(document.getElementById("id_username").value==="" || document.getElementById("id_password1").value==="" || document.getElementById("id_password2").value==="") { 
+            document.getElementById('form_btn').disabled = true; 
+        } else { 
+            document.getElementById('form_btn').disabled = false;
+        }
+    }
+</script>
 
 {% endblock content %}
