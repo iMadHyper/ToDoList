@@ -38,9 +38,7 @@ def signup_user(request):
             login(request, user)
             return redirect('app:index')
         else:
-            print(form.errors)
-            messages.success(request, f'{form.errors}')
-            return render(request, 'users/signup.html', {'form':form})
+            return render(request, 'users/signup.html', { 'form' : form })
     else:
         form = RegisterUserForm()
         return render(request, 'users/signup.html', {'form':form})
