@@ -40,7 +40,7 @@ def respect_render_after_adding_task(request, msg=None):
     Render the template from request if possible
     '''
     url = '/'.join(request.META['HTTP_REFERER'].split('//')[1].split('/')[1:])
-    if url == 'app/upcoming':
+    if url == 'app/upcoming/':
         return render(request, 'todo/upcoming_tasks.html', { 'msg' : msg })
     else:
         return render(request, 'todo/main.html', { 'msg' : msg })
@@ -53,12 +53,21 @@ def add_task(request):
         if form.is_valid():
             cd = form.cleaned_data
             cd['user'] = request.user
+            print(cd['time'])
 
             if not cd['date']:
                 cd['date'] = datetime.date.today()
             elif cd['date'] < datetime.date.today():
                 msg = 'Date can\'t be past!'
                 return respect_render_after_adding_task(request, msg=msg)
+            
+            if cd['time']:
+                now = datetime.datetime.now()
+                t1 = datetime.timedelta(hours=cd['time'].hour, minutes=cd['time'].minute, seconds=cd['time'].second)
+                t2 = datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
+                if t1 < t2:
+                    msg = 'Date and time can\'t be past!'
+                    return respect_render_after_adding_task(request, msg=msg)
             
             models.Task.objects.create(**cd)
             return respect_redirect_after_adding_task(request)
