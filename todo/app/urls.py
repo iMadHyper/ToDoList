@@ -18,5 +18,5 @@ urlpatterns = [
     re_path(r"^completed/$", views.completed_tasks , name="completed_tasks"),
     re_path(r"^upcoming/$", views.upcoming_tasks , name="upcoming_tasks"),
 
-    re_path(r'^', views.index, name='index'),
+    re_path(r'^today/$', views.index, name='index'),
 ]

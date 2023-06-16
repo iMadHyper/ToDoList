@@ -33,7 +33,7 @@
     <ul class="nav flex-column mt-4">
         <li class="nav-item fs-5 navbar-btn">
             <div class="d-flex flex-row justify-content-center align-items-center">
-                <a class="nav-link flex-grow-1 text-dark" href="#">Folders</a>
+                <span class="nav-link flex-grow-1 text-dark">Folders</span>
                 <a href="#" class="nav-link text-dark m-0 p-0 px-2 fs-4" data-bs-toggle="modal" data-bs-target="#exampleModal">+</a>
                 <span class="mx-2">{% if folders.count > 0 %}{{ folders.count }}{% endif %}</span>
             </div>
@@ -87,7 +87,7 @@
                     <div class="row">
                         <div class="d-flex">
                             <div class="flex-grow-1 form-floating me-2">
-                                <input type="text" class="form-control" name="name" id="folder_floatingInput" placeholder="Username" maxlength="100" onkeyup="success()">
+                                <input type="text" class="form-control" name="name" id="folder_floatingInput" placeholder="Username" maxlength="100" onkeyup="add_folder()">
                                 <label for="folder_floatingInput">Name *</label>
                             </div>
                             <button id="folder_btn" type="submit" class="btn btn-primary" disabled>Add</button>
@@ -124,8 +124,8 @@
 </style>
 
 <script type="text/javascript">
-    function success() {
-        if(document.getElementById("folder_floatingInput").value==="") { 
+    function add_folder() {
+        if(document.getElementById("folder_floatingInput").value == "") { 
             document.getElementById('folder_btn').disabled = true; 
         } else { 
             document.getElementById('folder_btn').disabled = false;

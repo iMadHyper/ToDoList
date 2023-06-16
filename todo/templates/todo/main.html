@@ -14,7 +14,7 @@
             </div>
         {% endfor %}
     {% endif %}
-    <div class="accordion" id="accordionExample">
+    <div class="accordion shadow-sm" id="accordionExample">
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button collapsed fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -23,7 +23,7 @@
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <form method="POST" class="fs-5 m-3" action="{% url 'app:add_task' %}">
+                    <form method="POST" class="fs-5" action="{% url 'app:add_task' %}">
                         {% csrf_token %}
                         {% if form.errors %}
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -40,7 +40,7 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Name" maxlength="150">
+                                    <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Name" maxlength="150" onkeyup="success()">
                                     <label for="floatingInput">Name *</label>
                                 </div>
                             </div>
@@ -58,12 +58,14 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
-                                    <textarea class="form-control" name="description" placeholder="Description" id="floatingTextarea" maxlength="500"></textarea>
+                                    <textarea class="form-control" name="description" placeholder="Description" id="floatingTextarea" maxlength="500" onkeyup="success()"></textarea>
                                     <label for="floatingTextarea">Description *</label>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary m-2">Добавить</button>
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary m-2 ms-md-auto py-2 px-3 fs-5" id="form_btn" disabled>Add</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -102,7 +104,7 @@
                         {{ task.date }}
                     </div>
                     <div class="d-flex justify-content-center align-items-center m-0 p-0 me-2">
-                        <a href="{% url 'app:complete_task' task.id %}" class="btn btn-success">Выполнено</a>
+                        <a href="{% url 'app:complete_task' task.id %}" class="btn btn-success">Complete</a>
                     </div>
                     <div class="d-flex justify-content-center align-items-center m-0 p-0">
                         <a href="{% url 'app:delete_task' task.id %}" class="btn-close"></a>   
@@ -117,5 +119,15 @@
         {% endif %}
     </div>
 </div>
+
+<script type="text/javascript">
+    function success() {
+        if(document.getElementById("floatingInput").value==="" || document.getElementById("floatingTextarea").value==="") { 
+            document.getElementById('form_btn').disabled = true; 
+        } else { 
+            document.getElementById('form_btn').disabled = false;
+        }
+    }
+</script>
 
 {% endblock content %}
