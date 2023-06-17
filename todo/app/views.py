@@ -7,6 +7,8 @@ from . import models
 
 import datetime
 
+import re
+
 
 def if_logged_in(func):
     def wrapper(request, *args, **kwargs):
@@ -19,7 +21,6 @@ def if_logged_in(func):
 @if_logged_in
 def index(request):
     form = forms.AddTaskForm()
-    
     return render(request, 'todo/main.html', { 'form' : form })
 
 
@@ -75,7 +76,10 @@ def add_task(request):
         else:
             return respect_render_after_adding_task(request, msg=form.errors)
     else:
-        return respect_redirect_after_adding_task(request)
+        try:
+            return redirect(request.META['HTTP_REFERER'])
+        except:
+            return redirect('app:index')
 
 
 @if_logged_in
@@ -85,7 +89,10 @@ def delete_task(request, pk):
     if task:
         task.delete()
 
-    return redirect(request.META['HTTP_REFERER'])
+    try:
+        return redirect(request.META['HTTP_REFERER'])
+    except:
+        return redirect('app:index')
 
 
 @if_logged_in
@@ -96,7 +103,10 @@ def complete_task(request, pk):
         task.is_completed = True
         task.save()
 
-    return redirect(request.META['HTTP_REFERER'])
+    try:
+        return redirect(request.META['HTTP_REFERER'])
+    except:
+        return redirect('app:index')
 
 
 @if_logged_in
@@ -111,6 +121,35 @@ def upcoming_tasks(request):
     return render(request, 'todo/upcoming_tasks.html', { 'form' : form })
 
 
+redirects = {
+    'app/today/' : 'app:index',
+    'app/upcoming/' : 'app:upcoming_tasks',
+    'app/completed/' : 'app:completed_tasks',
+}
+
+renders = {
+
+}
+
+def respect_redirect(request):
+    '''
+    Redirect to template from request if possible
+    '''
+    url = '/'.join(request.META['HTTP_REFERER'].split('//')[1].split('/')[1:]).strip()
+    print(url)
+    try:
+        if re.match(r'^app/(\d+)/$', url):
+            print('true')
+            print(url.split('/')[1])
+            try:
+                return redirect('app:folder_tasks', folder_pk=int(url.split('/')[1]))
+            except:
+                return redirect('app:index')
+        return redirect(redirects[url])
+    except:
+        return redirect('app:index')
+
+
 @if_logged_in
 def add_folder(request):
     if request.method == 'POST':
@@ -118,13 +157,12 @@ def add_folder(request):
         if form.is_valid():
             cd = form.cleaned_data
             cd['user'] = request.user
-            cd['slug'] = slugify(str(cd['name']))
-            models.Folder.objects.create(**cd)
-            return redirect(request.META['HTTP_REFERER'])
+            folder = models.Folder.objects.create(**cd)
+            return redirect('app:folder_tasks', folder_pk=folder.id)
         else:
-            return redirect(request.META['HTTP_REFERER'])
+            return respect_redirect(request)
     else:
-        return redirect('app:index')
+        return respect_redirect(request)
 
 
 @if_logged_in

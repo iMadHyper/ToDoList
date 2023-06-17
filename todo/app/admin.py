@@ -5,7 +5,7 @@ from . import models
 
 @admin.register(models.Folder)
 class FolderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name', 'slug')
+    list_display = ('user', 'name')
 
 
 @admin.register(models.Section)
