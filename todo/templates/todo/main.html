@@ -6,9 +6,11 @@
 
 <div class="col-md-10 py-4 px-5 fs-3">
     <h1 class="mb-3">Today</h1>
-    {% if msg %}
+    {% if messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ msg }}
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     {% endif %}
@@ -21,7 +23,7 @@
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <form method="POST" class="fs-5" action="{% url 'app:add_task' %}">
+                    <form method="POST" class="fs-5" action="{% url 'app:index' %}">
                         {% csrf_token %}
 
                         <div class="row g-3">

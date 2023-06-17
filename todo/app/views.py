@@ -20,8 +20,36 @@ def if_logged_in(func):
 
 @if_logged_in
 def index(request):
-    form = forms.AddTaskForm()
-    return render(request, 'todo/main.html', { 'form' : form })
+    template_name = 'todo/main.html'
+
+    if request.method == 'POST':
+        form = forms.AddTaskForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            cd['user'] = request.user
+
+            if not cd['date']:
+                cd['date'] = datetime.date.today()
+            elif cd['date'] < datetime.date.today():
+                messages.success(request, 'Date can\'t be past!')
+                return render(request, template_name)
+
+            if cd['time']:
+                now = datetime.datetime.now()
+                t1 = datetime.timedelta(hours=cd['time'].hour, minutes=cd['time'].minute, seconds=cd['time'].second)
+                t2 = datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
+                if t1 < t2:
+                    messages.success(request, 'Date and time can\'t be past!')
+                    return render(request, template_name)
+            
+            models.Task.objects.create(**cd)
+            return render(request, template_name)
+        else:
+            messages.success(request, f'{form.errors}')
+            return render(request, template_name)
+    else:
+        form = forms.AddTaskForm()
+        return render(request, template_name, { 'form' : form })
 
 
 def respect_redirect_after_adding_task(request):
