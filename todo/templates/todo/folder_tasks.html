@@ -6,12 +6,10 @@
 
 <div class="col-md-10 py-4 px-5 fs-3">
     <h1 class="mb-3">{{ folder.name }}</h1>
-    {% if form.errors %}
+    {% if messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {% for field in form %}
-                {% if field.errors %}
-                    {{ field.errors }}
-                {% endif %}
+            {% for message in messages %}
+            {{ message }}
             {% endfor %}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -25,7 +23,7 @@
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <form method="POST" class="fs-5 m-3" action="{% url 'app:add_folder_task' folder.id %}">
+                    <form method="POST" class="fs-5 m-3" action="{% url 'app:folder_tasks' folder.id %}">
                         {% csrf_token %}
 
                         <div class="row g-3">

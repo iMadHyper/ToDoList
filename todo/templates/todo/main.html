@@ -69,15 +69,22 @@
                 <div class="d-flex flex-row">
                     <div class="flex-grow-1 d-flex m-0 p-0">
                         <div class="container-fluid p-0 m-0">
-                            <div class="container-fluid row">
-                                {{ task.name }}
-                                {% if task.category %}
-                                 / {{ task.category }}
+                            <div class="d-flex flex-row m-0 p-0 me-2">
+                                {% if task.folder %}
+                                <a href="{% url 'app:folder_tasks' task.folder.id %}" style="color: dodgerblue; text-decoration: none;" class="me-2">
+                                    {{ task.folder }} /
+                                </a>
                                 {% endif %}
-                                
+
                                 {% if task.section %}
-                                 / {{ task.section }}
+                                <a href="#" style="color: coral;" class="me-2">
+                                    {{ task.section }} /
+                                </a>
                                 {% endif %}
+
+                                <div class="m-0 p-0 flex-grow-1">
+                                    {{ task.name }}
+                                </div>
                             </div>
                             {% if task.description %}
                             <div class="container-fluid row fs-4" style="color: #868686;">
