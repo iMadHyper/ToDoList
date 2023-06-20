@@ -10,7 +10,7 @@ def get_overdue_tasks(user):
 
 def get_today_tasks(user):
     '''Returns user's incompleted today tasks'''
-    return models.Task.objects.filter(user=user).filter(is_completed=False).filter(date__lte=datetime.date.today()).order_by("-date", "-time")
+    return models.Task.objects.filter(user=user).filter(is_completed=False).filter(date=datetime.date.today()).order_by("-date", "-time")
 
 
 def get_upcoming_tasks(user):
@@ -25,7 +25,7 @@ def get_completed_tasks(user):
 
 def get_folders(user):
     '''Returns user's folders'''
-    return models.Folder.Objects.filter(user=user)
+    return models.Folder.objects.filter(user=user)
 
 
 def get_folder_tasks(user, folder_pk):
