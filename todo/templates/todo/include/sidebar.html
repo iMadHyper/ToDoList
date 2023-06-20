@@ -4,12 +4,19 @@
 {% get_today_tasks user as today_tasks %}
 {% get_upcoming_tasks user as upcoming_tasks %}
 {% get_completed_tasks user as completed_tasks %}
+{% get_overdue_tasks user as overdue_tasks %}
 
 {% get_folders user as folders %}
 
 <div class="col-md-2 d-flex flex-column flex-shrink-0 p-3" style="background-color: #f3f3f3;">
 
     <ul class="nav flex-column">
+        <li class="nav-item fs-5 navbar-btn">
+            <div class="d-flex flex-row justify-content-center align-items-center">
+                <a class="nav-link flex-grow-1 text-dark" href="{% url 'app:overdue_tasks' %}">Overdue</a>
+                <span class="mx-2">{{ overdue_tasks.count }}</span>
+            </div>
+        </li>
         <li class="nav-item fs-5 navbar-btn">
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <a class="nav-link flex-grow-1 text-dark" href="{% url 'app:completed_tasks' %}">Completed</a>

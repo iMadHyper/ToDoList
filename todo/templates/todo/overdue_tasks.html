@@ -1,0 +1,64 @@
+{% extends 'todo/base.html' %}
+{% load tasks_tags %}
+{% block title %}Overdue{% endblock title %}
+
+{% block content %}
+
+<div class="col-md-10 py-4 px-5 fs-3">
+    <h1 class="mb-3">Overdue</h1>
+    <div class="container-fluid">
+        {% get_overdue_tasks user as tasks %}
+        {% if tasks %}
+            {% for task in tasks %}
+            <div class="container-fluid row m-0 my-2 p-2" style="border-bottom: 1px solid #ccc;">
+                <div class="d-flex flex-row">
+                    <div class="flex-grow-1 d-flex m-0 p-0">
+                        <div class="container-fluid p-0 m-0">
+                            <div class="d-flex flex-row m-0 p-0 me-2">
+                                {% if task.folder %}
+                                <a href="{% url 'app:folder_tasks' task.folder.id %}" style="color: dodgerblue; text-decoration: none;" class="me-2">
+                                    {{ task.folder }} /
+                                </a>
+                                {% endif %}
+
+                                {% if task.section %}
+                                <a href="#" style="color: coral;" class="me-2">
+                                    {{ task.section }} /
+                                </a>
+                                {% endif %}
+
+                                <div class="m-0 p-0 flex-grow-1">
+                                    {{ task.name }}
+                                </div>
+                            </div>
+                            {% if task.description %}
+                            <div class="container-fluid row fs-4" style="color: #868686;">
+                                {{ task.description }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center m-0 p-0 me-4" style="min-width: 200px;">
+                        {% if task.time %}
+                        {{ task.time }}, 
+                        {% endif %}
+                        {{ task.date }}
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center m-0 p-0 me-2">
+                        <a href="{% url 'app:complete_task' task.id %}" class="btn btn-success">Complete</a>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center m-0 p-0">
+                        <a href="{% url 'app:delete_task' task.id %}" class="btn-close"></a>   
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="my-2 p-2">
+                <h1>No tasks</h1>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

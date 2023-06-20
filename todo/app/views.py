@@ -98,6 +98,11 @@ def completed_tasks(request):
 
 
 @if_logged_in
+def overdue_tasks(request):
+    return render(request, 'todo/overdue_tasks.html')
+
+
+@if_logged_in
 def delete_task(request, pk):
     try:
         task = models.Task.objects.filter(user=request.user).filter(is_completed=False).get(pk=pk)
