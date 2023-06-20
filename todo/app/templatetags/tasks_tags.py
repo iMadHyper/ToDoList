@@ -36,4 +36,4 @@ def get_folder_form():
 
 @register.simple_tag()
 def get_folder_tasks(user, folder_pk):
-    return models.Folder.objects.filter(user=user).get(pk=folder_pk).get_tasks().filter(is_completed=False)
+    return models.Folder.objects.filter(user=user).get(pk=folder_pk).get_tasks().filter(is_completed=False).order_by("-date", "-time")
