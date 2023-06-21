@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.utils.text import slugify
 
 from django.core.exceptions import ObjectDoesNotExist
 
 from . import forms
 from . import models
+from . import actions
 
 import datetime
 
@@ -28,8 +28,11 @@ def if_logged_in(func):
 @if_logged_in
 def index(request):
     template_name = 'todo/main.html'
+    tasks = actions.get_today_tasks(request.user)
+    context = { 'tasks' : tasks }
 
     if request.method == 'POST':
+        context['form_filter'] = forms.TodayTasksFilter()
         form = forms.AddTaskForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -39,7 +42,7 @@ def index(request):
                 cd['date'] = datetime.date.today()
             elif cd['date'] < datetime.date.today():
                 messages.success(request, 'Date and time can\'t be past!')
-                return render(request, template_name)
+                return render(request, template_name, context)
 
             if cd['time']:
                 now = datetime.datetime.now()
@@ -47,16 +50,23 @@ def index(request):
                 t2 = datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
                 if t1 < t2:
                     messages.success(request, 'Date and time can\'t be past!')
-                    return render(request, template_name)
+                    return render(request, template_name, context)
             
             models.Task.objects.create(**cd)
-            return render(request, template_name)
+            return render(request, template_name, context)
         else:
             messages.success(request, f'{form.errors}')
-            return render(request, template_name)
+            return render(request, template_name, context)
     else:
-        form = forms.AddTaskForm()
-        return render(request, template_name, { 'form' : form })
+        context['form_filter'] = forms.TodayTasksFilter(request.GET)
+        context['form'] = forms.AddTaskForm()
+
+        name = request.GET.get('name')
+        if name:
+            tasks = tasks.filter(name__icontains=name)
+            context['tasks'] = tasks
+
+        return render(request, template_name, context)
 
 
 @if_logged_in
