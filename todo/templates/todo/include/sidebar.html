@@ -8,7 +8,7 @@
 
 {% get_folders user as folders %}
 
-<div class="d-flex flex-column flex-shrink-0 p-2" style="background-color: #f3f3f3; min-width: 300px;">
+<div class="d-flex flex-column flex-shrink-0 p-2" style="background-color: #f0f0f0; min-width: 300px; border-right: 1px solid #e6e6e6;">
 
     <ul class="nav flex-column">
         <li class="nav-item navbar-btn">
@@ -69,15 +69,15 @@
 
 {% get_folder_form as form %}
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal modal-lg fade fs-4" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add new folder</h1>
+                <h1 class="modal-title" id="exampleModalLabel">Add new folder</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" class="fs-5 m-3" action="{% url 'app:add_folder' %}">
+                <form method="POST" class="m-3" action="{% url 'app:add_folder' %}">
                     {% csrf_token %}
                     {% if form.errors %}
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -93,11 +93,10 @@
 
                     <div class="row">
                         <div class="d-flex">
-                            <div class="flex-grow-1 form-floating me-2">
-                                <input type="text" class="form-control" name="name" id="folder_floatingInput" placeholder="Username" maxlength="100" onkeyup="add_folder()">
-                                <label for="folder_floatingInput">Name *</label>
+                            <div class="flex-grow-1 d-flex me-2">
+                                <input type="text" class="form-control fs-4" name="name" id="folder_floatingInput" placeholder="Folder name" maxlength="100" onkeyup="add_folder()">
                             </div>
-                            <button id="folder_btn" type="submit" class="btn btn-primary" disabled>Add</button>
+                            <button id="folder_btn" type="submit" class="btn btn-primary fs-4 py-2 px-3" disabled>Add</button>
                         </div>
                     </div>
                 </form>
