@@ -32,7 +32,7 @@ def index(request):
     context = { 'tasks' : tasks }
 
     if request.method == 'POST':
-        context['form_filter'] = forms.TodayTasksFilter(request.user)
+        context['form_filter'] = forms.TasksFilterWithFolder(request.user)
         form = forms.AddTaskForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -66,7 +66,7 @@ def index(request):
         if folder_id:
             tasks = tasks.filter(folder__id=folder_id)
 
-        context['form_filter'] = forms.TodayTasksFilter(data=request.GET, user=request.user)
+        context['form_filter'] = forms.TasksFilterWithFolder(data=request.GET, user=request.user)
         context['form'] = forms.AddTaskForm()
         context['tasks'] = tasks
         return render(request, template_name, context)
@@ -75,7 +75,11 @@ def index(request):
 @if_logged_in
 def upcoming_tasks(request):
     template_name = 'todo/upcoming_tasks.html'
+    tasks = actions.get_upcoming_tasks(request.user)
+    context = { 'tasks' : tasks }
+
     if request.method == 'POST':
+        context['form_filter'] = forms.TasksFilterWithDateAndFolder(request.user)
         form = forms.AddTaskForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -85,7 +89,7 @@ def upcoming_tasks(request):
                 cd['date'] = datetime.date.today()
             elif cd['date'] < datetime.date.today():
                 messages.success(request, 'Date and time can\'t be past!')
-                return render(request, template_name)
+                return render(request, template_name, context)
 
             if cd['time']:
                 now = datetime.datetime.now()
@@ -93,26 +97,84 @@ def upcoming_tasks(request):
                 t2 = datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
                 if t1 < t2:
                     messages.success(request, 'Date and time can\'t be past!')
-                    return render(request, template_name)
+                    return render(request, template_name, context)
             
             models.Task.objects.create(**cd)
-            return render(request, template_name)
+            return render(request, template_name, context)
         else:
             messages.success(request, f'{form.errors}')
-            return render(request, template_name)
+            return render(request, template_name, context)
     else:
-        form = forms.AddTaskForm()
-        return render(request, template_name, { 'form' : form })
+        name = request.GET.get('name')
+        if name:
+            tasks = tasks.filter(name__icontains=name)
+
+        folder_id = request.GET.get('folder')
+        if folder_id:
+            tasks = tasks.filter(folder__id=folder_id)
+
+        start_date = request.GET.get('date_start')
+        if start_date:
+            tasks = tasks.filter(date__gte=start_date)
+
+        end_date = request.GET.get('date_end')
+        if end_date:
+            tasks = tasks.filter(date__lte=end_date)
+
+        context['form_filter'] = forms.TasksFilterWithDateAndFolder(data=request.GET, user=request.user)
+        context['form'] = forms.AddTaskForm()
+        context['tasks'] = tasks
+        return render(request, template_name, context)
 
 
 @if_logged_in
 def completed_tasks(request):
-    return render(request, 'todo/completed_tasks.html')
+    tasks = actions.get_completed_tasks(request.user)
+
+    name = request.GET.get('name')
+    if name:
+        tasks = tasks.filter(name__icontains=name)
+
+    folder_id = request.GET.get('folder')
+    if folder_id:
+        tasks = tasks.filter(folder__id=folder_id)
+
+    start_date = request.GET.get('date_start')
+    if start_date:
+        tasks = tasks.filter(date__gte=start_date)
+
+    end_date = request.GET.get('date_end')
+    if end_date:
+        tasks = tasks.filter(date__lte=end_date)
+
+    context = { 'tasks' : tasks, 'form_filter' : forms.TasksFilterWithDateAndFolder(data=request.GET, user=request.user)}
+
+    return render(request, 'todo/completed_tasks.html', context)
 
 
 @if_logged_in
 def overdue_tasks(request):
-    return render(request, 'todo/overdue_tasks.html')
+    tasks = actions.get_overdue_tasks(request.user)
+
+    name = request.GET.get('name')
+    if name:
+        tasks = tasks.filter(name__icontains=name)
+
+    folder_id = request.GET.get('folder')
+    if folder_id:
+        tasks = tasks.filter(folder__id=folder_id)
+
+    start_date = request.GET.get('date_start')
+    if start_date:
+        tasks = tasks.filter(date__gte=start_date)
+
+    end_date = request.GET.get('date_end')
+    if end_date:
+        tasks = tasks.filter(date__lte=end_date)
+
+    context = { 'tasks' : tasks, 'form_filter' : forms.TasksFilterWithDateAndFolder(data=request.GET, user=request.user)}
+
+    return render(request, 'todo/overdue_tasks.html', context)
 
 
 @if_logged_in
@@ -187,7 +249,11 @@ def folder_tasks(request, folder_pk):
         messages.success(request, 'The folder matching query does not exist!')
         return render(request, ERRORS_TEMPLATE)
 
+    tasks = actions.get_folder_tasks(request.user, folder_pk=folder.id)
+    context = { 'folder' : folder, 'tasks' : tasks }
+
     if request.method == 'POST':
+        context['form_filter'] = forms.TasksFilterWithDate()
         form = forms.AddTaskForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -198,7 +264,7 @@ def folder_tasks(request, folder_pk):
                 cd['date'] = datetime.date.today()
             elif cd['date'] < datetime.date.today():
                 messages.success(request, 'Date and time can\'t be past!')
-                return render(request, template_name, { 'folder' : folder })
+                return render(request, template_name, context)
             
             if cd['time']:
                 now = datetime.datetime.now()
@@ -206,13 +272,30 @@ def folder_tasks(request, folder_pk):
                 t2 = datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
                 if t1 < t2:
                     messages.success(request, 'Date and time can\'t be past!')
-                    return render(request, template_name, { 'folder' : folder })
+                    return render(request, template_name, context)
             
             models.Task.objects.create(**cd)
-            return render(request, template_name, { 'folder' : folder })
+            return render(request, template_name, context)
         else:
             messages.success(request, f'{form.errors}')
-            return render(request, template_name, { 'folder' : folder })
+            return render(request, template_name, context)
     else:
-        form = forms.AddTaskForm()
-        return render(request, template_name, { 'folder' : folder, 'form' : form })
+        context['form'] = forms.AddTaskForm()
+
+        name = request.GET.get('name')
+        if name:
+            tasks = tasks.filter(name__icontains=name)
+
+        start_date = request.GET.get('date_start')
+        if start_date:
+            tasks = tasks.filter(date__gte=start_date)
+
+        end_date = request.GET.get('date_end')
+        if end_date:
+            tasks = tasks.filter(date__lte=end_date)
+
+        context['form_filter'] = forms.TasksFilterWithDate(data=request.GET)
+        context['form'] = forms.AddTaskForm()
+        context['tasks'] = tasks
+
+        return render(request, template_name, context)

@@ -1,5 +1,4 @@
 {% extends 'todo/base.html' %}
-{% load tasks_tags %}
 {% block title %}{{ folder.name }}{% endblock title %}
 
 {% block content %}
@@ -61,8 +60,55 @@
         </div>
     </div>
 
+    <div class="accordion shadow-sm mt-3 mb-3" id="accordionExample2">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button collapsed fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+                Filters
+                </button>
+            </h2>
+            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionExample2">
+                <div class="accordion-body">
+                    <form method="GET">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <div class="col-md-6 d-flex flex-row justify-content-center align-items-center me-3">
+                                <div class="d-flex me-2">
+                                    {{ form_filter.date_start.label_tag }}
+                                </div>
+                                <div class="d-flex flex-grow-1">
+                                    {{ form_filter.date_start }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex flex-row justify-content-center align-items-center">
+                                <div class="d-flex me-2">
+                                    {{ form_filter.date_end.label_tag }}
+                                </div>
+                                <div class="d-flex flex-grow-1">
+                                    {{ form_filter.date_end }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row justify-content-center align-items-center mt-2">
+                            <div class="flex-grow-1 me-3">
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <div class="d-flex">
+                                            {{ form_filter.name }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary py-2 px-3 fs-5">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
-        {% get_folder_tasks user folder.id as tasks %}
         {% if tasks %}
             {% for task in tasks %}
             <div class="container-fluid row m-0 my-2 p-2" style="border-bottom: 1px solid #ccc;">

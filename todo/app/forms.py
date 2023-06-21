@@ -4,7 +4,7 @@ from . import models
 from . import actions
 
 
-class TodayTasksFilter(forms.Form):
+class TasksFilter(forms.Form):
     name = forms.CharField(
         max_length=150,
         required=False,
@@ -13,6 +13,9 @@ class TodayTasksFilter(forms.Form):
             'placeholder' : 'Name'
         })
     )
+
+
+class TasksFilterWithFolder(TasksFilter):
     folder = forms.ModelChoiceField(
         queryset=None,
         label='Folder',
@@ -27,6 +30,33 @@ class TodayTasksFilter(forms.Form):
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['folder'].queryset = actions.get_folders(user)
+
+
+class TasksFilterWithDate(TasksFilter):
+    date_start = forms.DateField(
+        required=False,
+        label='Start date',
+        widget=forms.DateInput(attrs={
+            'class' : 'form-control fs-4',
+            'placeholder' : 'Start date',
+            'type' : 'date'
+        })
+    )
+
+    date_end = forms.DateField(
+        required=False,
+        label='End date',
+        widget=forms.DateInput(attrs={
+            'class' : 'form-control fs-4',
+            'placeholder' : 'End date',
+            'type' : 'date'
+        })
+    )
+
+
+class TasksFilterWithDateAndFolder(TasksFilterWithDate, TasksFilterWithFolder):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class AddTaskForm(forms.ModelForm):
