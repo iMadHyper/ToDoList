@@ -61,7 +61,7 @@ class TasksFilterWithDateAndFolder(TasksFilterWithDate, TasksFilterWithFolder):
 
 class AddTaskForm(forms.ModelForm):
     name = forms.CharField(label='Name', widget=forms.TextInput())
-    description = forms.CharField(label='Description', widget=forms.Textarea())
+    description = forms.CharField(label='Description', required=False, widget=forms.Textarea())
     date = forms.DateField(label='Date', required=False, widget=forms.DateInput())
     time = forms.TimeField(label='Time', required=False, widget=forms.TimeInput())
 

@@ -47,7 +47,7 @@
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
                                     <textarea class="form-control" name="description" placeholder="Description" id="floatingTextarea" maxlength="500" onkeyup="success()"></textarea>
-                                    <label for="floatingTextarea">Description *</label>
+                                    <label for="floatingTextarea">Description</label>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
 
 <script type="text/javascript">
     function success() {
-        if(document.getElementById("floatingInput").value==="" || document.getElementById("floatingTextarea").value==="") { 
+        if(document.getElementById("floatingInput").value==="") { 
             document.getElementById('form_btn').disabled = true; 
         } else { 
             document.getElementById('form_btn').disabled = false;
