@@ -69,15 +69,26 @@
             </h2>
             <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionExample2">
                 <div class="accordion-body">
-                    <form method="GET" class="fs-5">
-                        <div class="row g-3">
-                            <div class="form-floating mb-3">
-                                {{ form_filter.name }}
-                                <label for="{{ form_filter.name.id_for_label }}">{{ form_filter.name.label }}</label>
+                    <form method="GET">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <div class="flex-grow-1 me-3">
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <div class="d-flex">
+                                            {{ form_filter.name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex">
+                                            {{ form_filter.folder }}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex">
-                            <button type="submit" class="btn btn-primary m-2 ms-md-auto py-2 px-3">Search</button>
+                            <div>
+                                <button type="submit" class="btn btn-primary me-2 py-2 px-3 fs-5">Search</button>
+                                <button type="button" class="btn btn-warning py-2 px-3 fs-5" value="Reset" id="resetBtn" onClick="this.form.reset()">Clear</button>
+                            </div>
                         </div>
                     </form>
                 </div>

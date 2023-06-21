@@ -1,18 +1,32 @@
 from django import forms
 
 from . import models
+from . import actions
 
 
 class TodayTasksFilter(forms.Form):
     name = forms.CharField(
-        label='Name',
         max_length=150,
         required=False,
         widget=forms.TextInput(attrs={
-            'class' : 'form-control',
+            'class' : 'form-control fs-4',
             'placeholder' : 'Name'
         })
     )
+    folder = forms.ModelChoiceField(
+        queryset=None,
+        label='Folder',
+        required=False,
+        empty_label='Folder',
+        widget=forms.Select(attrs={
+            'class' : 'form-select fs-4'
+        })
+    )
+
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['folder'].queryset = actions.get_folders(user)
 
 
 class AddTaskForm(forms.ModelForm):

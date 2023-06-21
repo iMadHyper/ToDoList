@@ -23,7 +23,7 @@
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <form method="POST" class="fs-5 m-3" action="{% url 'app:upcoming_tasks' %}">
+                    <form method="POST" class="fs-5" action="{% url 'app:upcoming_tasks' %}">
                         {% csrf_token %}
 
                         <div class="row g-3">

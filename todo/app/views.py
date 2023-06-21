@@ -32,7 +32,7 @@ def index(request):
     context = { 'tasks' : tasks }
 
     if request.method == 'POST':
-        context['form_filter'] = forms.TodayTasksFilter()
+        context['form_filter'] = forms.TodayTasksFilter(request.user)
         form = forms.AddTaskForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -58,14 +58,17 @@ def index(request):
             messages.success(request, f'{form.errors}')
             return render(request, template_name, context)
     else:
-        context['form_filter'] = forms.TodayTasksFilter(request.GET)
-        context['form'] = forms.AddTaskForm()
-
         name = request.GET.get('name')
         if name:
             tasks = tasks.filter(name__icontains=name)
-            context['tasks'] = tasks
 
+        folder_id = request.GET.get('folder')
+        if folder_id:
+            tasks = tasks.filter(folder__id=folder_id)
+
+        context['form_filter'] = forms.TodayTasksFilter(data=request.GET, user=request.user)
+        context['form'] = forms.AddTaskForm()
+        context['tasks'] = tasks
         return render(request, template_name, context)
 
 
