@@ -21,23 +21,8 @@ class Folder(models.Model):
         return self.tasks.all()
 
 
-class Section(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sections', verbose_name='Пользователь', null=True, blank=True)
-    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='sections', null=True, blank=True)
-    name = models.CharField(max_length=100, verbose_name='Название')
-
-
-    def __str__(self):
-        return self.name
-    
-
-    def get_tasks(self):
-        return self.tasks.all()
-
-
 class Task(models.Model):
     folder = models.ForeignKey(Folder, on_delete=models.SET_NULL, related_name='tasks', null=True, blank=True)
-    section = models.ForeignKey(Section, on_delete=models.SET_NULL, related_name='tasks', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks', verbose_name='Пользователь', null=True, blank=True)
     name = models.CharField(max_length=150, verbose_name='Название')
     description = models.TextField(max_length=500, verbose_name='Описание', null=True, blank=True)

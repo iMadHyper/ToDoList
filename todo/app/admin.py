@@ -16,7 +16,7 @@ class SectionAdmin(admin.ModelAdmin):
 @admin.register(models.Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('user', 'name', 'description', 'date', 'time', 'is_completed')
-    list_filter = ('date', 'time', 'name', 'folder', 'section')
+    list_filter = ('date', 'time', 'name', 'folder')
 
     fieldsets = (
         ('Добавить задачу', {
@@ -25,7 +25,7 @@ class TaskAdmin(admin.ModelAdmin):
         }),
         ('Дополнительные параметры', {
             'classes' : ('collapse',),
-            'fields' : ('folder', 'section', 'is_completed')
+            'fields' : ('folder', 'is_completed')
         }),
     )
 
