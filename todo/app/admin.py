@@ -8,11 +8,6 @@ class FolderAdmin(admin.ModelAdmin):
     list_display = ('user', 'name')
 
 
-@admin.register(models.Section)
-class SectionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'folder', 'name')
-
-
 @admin.register(models.Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('user', 'name', 'description', 'date', 'time', 'is_completed')
