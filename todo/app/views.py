@@ -159,9 +159,6 @@ def delete_folder(request, pk):
         messages.success(request, 'The folder matching query does not exist!')
         return render(request, ERRORS_TEMPLATE)
 
-    folder_tasks = folder.get_tasks()
-    if folder_tasks:
-        folder_tasks.delete()
     folder.delete()
 
     return redirect('app:index')
