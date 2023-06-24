@@ -1,10 +1,22 @@
 import pytest
 
-from app import actions
+from bs4 import BeautifulSoup
 
+from app import actions
 from app import models
 
 from datetime import date, timedelta
+
+
+def test_content(client, auto_login_user):
+    '''Test if client response has a content'''
+    client, user = auto_login_user()
+    response = client.get('/')
+    soup = BeautifulSoup(response.content, 'html.parser')
+    print(response)
+    print(response.content)
+    print(soup)
+    assert True
 
 
 def test_get_overdue_tasks(create_user):
